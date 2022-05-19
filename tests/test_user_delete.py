@@ -1,15 +1,19 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.feature('Delete user')
 class TestUserDelete(BaseCase):
-    # удалить пользователя по ID 2
+    @allure.story('удалить пользователя по ID 2')
     def test_delete_user_with_id(self):
-        logindata = {
-            'email': 'vinkotov@example.com',
-            'password': '1234'
-        }
+        with allure.step("login"):
+            logindata = {
+                'email': 'vinkotov@example.com',
+                'password': '1234'
+            }
         response1 = MyRequests.post("/user/login", data=logindata)
 
         auth_sid = self.get_cookie(response1, "auth_sid")
@@ -29,6 +33,7 @@ class TestUserDelete(BaseCase):
     #  Создать пользователя, авторизоваться из-под него,
     #  удалить, затем попробовать получить его данные по ID и убедиться,
     #  что пользователь действительно удален.
+
     def test_delete_created_user(self):
         register_data = self.prepare_registration_data()
         response1 = MyRequests.post("/user/", data=register_data)
